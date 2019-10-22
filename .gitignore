@@ -3,6 +3,5 @@ target
 .idea/vcs.xml
 .idea/uiDesigner.xml
 .idea/libraries
-.idea/modules.xml
 *.iml
 .DS_Store
