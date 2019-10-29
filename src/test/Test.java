@@ -3,7 +3,7 @@ package test;
 import main_package.Logic;
 import main_package.io.IOImpl;
 import main_package.questions.Question;
-import main_package.questions.QuestionsImpl;
+import main_package.questions.QuestionsProvider;
 import main_package.io.Messages;
 
 import org.junit.Before;
@@ -20,7 +20,7 @@ public class Test {
     private static String INCORRECT_ANSWER = "10";
 
     @Mock
-    private QuestionsImpl questions;
+    private QuestionsProvider questions;
 
     @Mock
     private IOImpl io;

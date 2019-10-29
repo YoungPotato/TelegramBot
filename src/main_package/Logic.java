@@ -24,8 +24,6 @@ public class Logic  {
         String input = io.read();
         if (input.equals("/help")) {
             io.write(Messages.HELP);
-        } else if (input.equals("/stop")) {
-            System.exit(0);
         } else if (isCorrectAnswer(input)) {
             io.write(Messages.CORRECT);
         } else {

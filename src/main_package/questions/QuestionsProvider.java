@@ -9,11 +9,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
 
-public class QuestionsImpl implements Questions {
+public class QuestionsProvider implements Questions {
 
     private String apiUrl;
 
-    public QuestionsImpl(String apiUrl) {
+    public QuestionsProvider(String apiUrl) {
         this.apiUrl = apiUrl;
     }
 
