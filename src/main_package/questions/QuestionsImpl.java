@@ -1,57 +1,47 @@
 package main_package.questions;
+
 import org.apache.commons.lang.StringEscapeUtils;
+import org.json.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class QuestionsImpl implements Questions {
 
-    @Override
-    public main_package.questions.Question getQuestion(String apiUrl, int level_difficulty) throws IOException {
+    private String apiUrl;
 
-        String url = String.format(apiUrl, level_difficulty);
-        URL obj = new URL(url);
-        HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
+    public QuestionsImpl(String apiUrl) {
+        this.apiUrl = apiUrl;
+    }
+
+    public Question getQuestion(int level_difficulty) throws IOException {
+        String apiUrl = String.format(this.apiUrl, level_difficulty);
+        URL url = new URL(apiUrl);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
-        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
-        String response = in.readLine();
-        in.close();
+        BufferedReader input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        String response = input.readLine();
+        input.close();
         return response2Question(response);
     }
 
-    private main_package.questions.Question response2Question(String response){
-        main_package.questions.Question question = new main_package.questions.Question();
-        String regex = "\"question\":\".+?,\"";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(response);
-        while (matcher.find()) {
-            question.question = response.substring(matcher.start() + 12, matcher.end() - 3);
-        }
-        regex = "\"answers\":.+?]";
-        pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(response);
-        String answers = "";
-        while (matcher.find()) {
-            answers = (response.substring(matcher.start() + 12, matcher.end() - 2));
-        }
-        String[] answersSplit = answers.split(",");
+    private Question response2Question(String response) {
+        Question question = new Question();
+        JSONObject obj = new JSONObject(response);
+        question.question = obj.getJSONObject("data").getString("question");
+        JSONArray answers = obj.getJSONObject("data").getJSONArray("answers");
         List<String> rawAnswers = new ArrayList<>();
-        for (String answer: answersSplit)
-            rawAnswers.add(StringEscapeUtils.unescapeJava(answer
-                    .replace("\\u2063", "")
-                    .replace("\"", "")));
+        for (Object answer: answers)
+            rawAnswers.add(StringEscapeUtils.unescapeJava((String)answer));
         question.correctAnswer = rawAnswers.get(0);
-        question.answers = randomizeAnswers(rawAnswers);
+        question.answers = shuffleAnswers(rawAnswers);
         return question;
     }
 
-    private List<String> randomizeAnswers(List<String> answers) {
+    private List<String> shuffleAnswers(List<String> answers) {
         Collections.shuffle(answers, new Random());
         return answers;
     }

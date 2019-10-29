@@ -1,9 +1,11 @@
 package test;
 
 import main_package.Logic;
+import main_package.io.IOImpl;
 import main_package.questions.Question;
-import main_package.io.IO;
-import main_package.questions.Questions;
+import main_package.questions.QuestionsImpl;
+import main_package.io.Messages;
+
 import org.junit.Before;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -18,9 +20,10 @@ public class Test {
     private static String INCORRECT_ANSWER = "10";
 
     @Mock
-    private Questions questions;
+    private QuestionsImpl questions;
+
     @Mock
-    private IO io;
+    private IOImpl io;
 
     private Logic logic;
 
@@ -29,36 +32,36 @@ public class Test {
 
         MockitoAnnotations.initMocks(this);
 
-        logic = new Logic(questions, io, "");
+        logic = new Logic(questions, io);
     }
 
     @org.junit.Test
     public void test_with_correct_answer() throws IOException {
 
-        Mockito.when(questions.getQuestion(Mockito.any(), Mockito.anyInt()))
+        Mockito.when(questions.getQuestion(Mockito.anyInt()))
                 .thenReturn(getMockedQuestion());
 
-        Mockito.when(io.read())
-                .thenReturn(ACTUAL_ANSWER);
+        Mockito.doReturn(ACTUAL_ANSWER)
+                .when(io).read();
 
         logic.ShowQuestion();
 
-        Mockito.verify(io, times(1)).correctAnswer();
+        Mockito.verify(io, times(1)).write(Messages.CORRECT);
     }
 
     @org.junit.Test
     public void test_with_incorrect_answer() throws IOException {
 
-        Mockito.when(questions.getQuestion(Mockito.any(), Mockito.anyInt()))
+        Mockito.when(questions.getQuestion(Mockito.anyInt()))
                 .thenReturn(getMockedQuestion());
 
-        Mockito.when(io.read())
-                .thenReturn(INCORRECT_ANSWER);
+        Mockito.doReturn(INCORRECT_ANSWER)
+                .when(io).read();
 
         logic.ShowQuestion();
 
-        Mockito.verify(io, times(1)).incorrectAnswer();
-        Mockito.verify(io, times(0)).correctAnswer();
+        Mockito.verify(io, times(1)).write(Messages.INCORRECT);
+        Mockito.verify(io, times(0)).write(Messages.CORRECT);
     }
 
     private Question getMockedQuestion() {

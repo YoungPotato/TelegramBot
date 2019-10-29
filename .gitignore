@@ -3,5 +3,5 @@ target
 .idea/vcs.xml
 .idea/uiDesigner.xml
 .idea/libraries
-*.iml
+.idea/codeStyles
 .DS_Store

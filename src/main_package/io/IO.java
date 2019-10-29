@@ -1,15 +1,6 @@
 package main_package.io;
-import main_package.questions.Question;
 
 public interface IO {
-
-    void printStart();
-
+    void write(String message);
     String read();
-    void write(Question question);
-
-    void printHelp();
-
-    void correctAnswer();
-    void incorrectAnswer();
 }
