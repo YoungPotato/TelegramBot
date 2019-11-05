@@ -2,39 +2,40 @@ package main_package;
 
 import main_package.io.IOImpl;
 import main_package.questions.Question;
-import main_package.questions.Questions;
-import main_package.io.Messages;
+import main_package.io.Message;
+import main_package.questions.QuestionsProvider;
 
 import java.io.IOException;
 
 public class Logic  {
-    private Questions questions;
+    private QuestionsProvider questions;
     private IOImpl io;
     private Question question;
+    private Boolean newQuestion;
 
-    public Logic(Questions questions, IOImpl io) {
+    public Logic(QuestionsProvider questions, IOImpl io) {
         this.questions = questions;
         this.io = io;
         question = new Question();
+        newQuestion = true;
+        io.write(Message.START);
     }
 
     public void ShowQuestion() throws IOException {
-        question = questions.getQuestion(3);
-        printQuestion(question);
+        if (newQuestion) {
+            question = questions.getQuestion(3);
+            io.write(question);
+        }
         String input = io.read();
         if (input.equals("/help")) {
-            io.write(Messages.HELP);
+            io.write(Message.HELP);
+            newQuestion = false;
         } else if (isCorrectAnswer(input)) {
-            io.write(Messages.CORRECT);
+            io.write(Message.CORRECT);
+            newQuestion = true;
         } else {
-            io.write(Messages.INCORRECT);
-        }
-    }
-
-    private void printQuestion(Question question) {
-        io.write(question.question);
-        for (int i = 0; i < question.answers.size(); i++) {
-            io.write(String.format("%s. %s", i + 1, question.answers.get(i)));
+            io.write(Message.INCORRECT);
+            newQuestion = true;
         }
     }
 

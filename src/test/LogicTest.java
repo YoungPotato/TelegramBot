@@ -4,7 +4,7 @@ import main_package.Logic;
 import main_package.io.IOImpl;
 import main_package.questions.Question;
 import main_package.questions.QuestionsProvider;
-import main_package.io.Messages;
+import main_package.io.Message;
 
 import org.junit.Before;
 import org.mockito.Mock;
@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import static org.mockito.Mockito.times;
 
-public class Test {
+public class LogicTest {
 
     private static String ACTUAL_ANSWER = "4";
     private static String INCORRECT_ANSWER = "10";
@@ -46,7 +46,7 @@ public class Test {
 
         logic.ShowQuestion();
 
-        Mockito.verify(io, times(1)).write(Messages.CORRECT);
+        Mockito.verify(io, times(1)).write(Message.CORRECT);
     }
 
     @org.junit.Test
@@ -60,8 +60,8 @@ public class Test {
 
         logic.ShowQuestion();
 
-        Mockito.verify(io, times(1)).write(Messages.INCORRECT);
-        Mockito.verify(io, times(0)).write(Messages.CORRECT);
+        Mockito.verify(io, times(1)).write(Message.INCORRECT);
+        Mockito.verify(io, times(0)).write(Message.CORRECT);
     }
 
     private Question getMockedQuestion() {
