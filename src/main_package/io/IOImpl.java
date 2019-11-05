@@ -1,6 +1,6 @@
 package main_package.io;
 
-import main_package.questions.Question;
+import main_package.questions.QnA;
 
 import java.util.Scanner;
 
@@ -30,10 +30,10 @@ public class IOImpl implements IO {
         return (scanner.nextLine());
     }
 
-    public void write(Question question) {
-        System.out.println(question.question);
-        for (int i = 0; i < question.answers.size(); i++) {
-            System.out.println(String.format("%s. %s", i + 1, question.answers.get(i)));
+    public void write(QnA question) {
+        System.out.println(question.getQuestion());
+        for (int i = 0; i < question.getAnswers().size(); i++) {
+            System.out.println(String.format("%s. %s", i + 1, question.getAnswers().get(i)));
         }
     }
 }

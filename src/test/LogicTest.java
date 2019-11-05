@@ -2,7 +2,7 @@ package test;
 
 import main_package.Logic;
 import main_package.io.IOImpl;
-import main_package.questions.Question;
+import main_package.questions.QnA;
 import main_package.questions.QuestionsProvider;
 import main_package.io.Message;
 
@@ -64,18 +64,15 @@ public class LogicTest {
         Mockito.verify(io, times(0)).write(Message.CORRECT);
     }
 
-    private Question getMockedQuestion() {
-
-        Question mockedQuestion = new Question();
+    private QnA getMockedQuestion() {
 
         ArrayList<String> answers = new ArrayList<>();
         answers.add(ACTUAL_ANSWER);
         answers.add(INCORRECT_ANSWER);
 
-        mockedQuestion.question = "Сколько сегодня пар?";
-        mockedQuestion.answers = answers;
-        mockedQuestion.correctAnswer = ACTUAL_ANSWER;
+        String question = "Сколько сегодня пар?";
+        String correctAnswer = ACTUAL_ANSWER;
 
-        return mockedQuestion;
+        return new QnA(question, answers, correctAnswer);
     }
 }
