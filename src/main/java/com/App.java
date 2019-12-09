@@ -1,4 +1,4 @@
-package main;
+package com;
 
 import bot.Bot;
 import org.telegram.telegrambots.ApiContextInitializer;
@@ -18,8 +18,8 @@ import questions.QuestionsProvider;
 public class App {
     public static void main(String[] args) {
         String apiUrl = "https://engine.lifeis.porn/api/millionaire.php?q=%s";
-        String botUserNamePath = "src/telegram_bot/privacy_information/bot_user_name.txt";
-        String botTokenPath = "src/telegram_bot/privacy_information/token.txt";
+        String botUserNamePath = "/src/main/java/privacy_information/bot_user_name.txt";
+        String botTokenPath = "/src/main/java/privacy_information/token.txt";
 
         HttpRequest httpRequest = new HttpRequest();
         JsonParser jsonParser = new JsonParser();
