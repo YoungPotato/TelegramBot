@@ -1,1 +1,1 @@
-worker: java -jar target/classes/telegram_bot/bot/Main
+worker: sh target/bin/workerBot
