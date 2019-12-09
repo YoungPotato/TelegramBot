@@ -4,12 +4,12 @@ import org.junit.Before;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import telegram_bot.Logic.HintsLogic;
-import telegram_bot.Players.Player;
-import telegram_bot.Players.PlayerStorage;
-import telegram_bot.bot.ChatId;
-import telegram_bot.questions.QnA;
-import telegram_bot.questions.QuestionsProvider;
+import main.Logic.HintsLogic;
+import main.Players.Player;
+import main.Players.PlayerStorage;
+import main.bot.ChatId;
+import main.questions.QnA;
+import main.questions.QuestionsProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -6,16 +6,16 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import telegram_bot.Logic.HintsLogic;
-import telegram_bot.Logic.Logic;
-import telegram_bot.Message.MessageBroker;
-import telegram_bot.Message.Messages;
-import telegram_bot.Players.Player;
-import telegram_bot.Players.PlayerStorage;
-import telegram_bot.bot.ChatId;
-import telegram_bot.io.TelegramIOImpl;
-import telegram_bot.questions.QnA;
-import telegram_bot.questions.QuestionsProvider;
+import main.Logic.HintsLogic;
+import main.Logic.Logic;
+import main.Message.MessageBroker;
+import main.Message.Messages;
+import main.Players.Player;
+import main.Players.PlayerStorage;
+import main.bot.ChatId;
+import main.io.TelegramIOImpl;
+import main.questions.QnA;
+import main.questions.QuestionsProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,8 +1,8 @@
 package tests.questions;
 
 import org.apache.commons.lang3.tuple.ImmutableTriple;
-import telegram_bot.questions.JsonParser;
-import telegram_bot.questions.QnA;
+import main.questions.JsonParser;
+import main.questions.QnA;
 
 import java.util.Arrays;
 import java.util.List;

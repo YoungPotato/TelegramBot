@@ -4,10 +4,10 @@ import org.junit.Before;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import telegram_bot.questions.HttpRequest;
-import telegram_bot.questions.JsonParser;
-import telegram_bot.questions.QnA;
-import telegram_bot.questions.QuestionsProvider;
+import main.questions.HttpRequest;
+import main.questions.JsonParser;
+import main.questions.QnA;
+import main.questions.QuestionsProvider;
 
 import java.io.IOException;
 import java.util.Arrays;
