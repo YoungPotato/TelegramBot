@@ -1,4 +1,4 @@
-package main;
+package main.com;
 
 import main.bot.Bot;
 import org.telegram.telegrambots.ApiContextInitializer;
