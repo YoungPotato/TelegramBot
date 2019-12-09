@@ -61,7 +61,7 @@
                     <assembleDirectory>target</assembleDirectory>
                     <programs>
                         <program>
-                            <mainClass>main.com.Main</mainClass>
+                            <mainClass>main.App</mainClass>
                             <name>workerBot</name>
                         </program>
                     </programs>

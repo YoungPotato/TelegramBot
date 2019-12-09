@@ -4,12 +4,12 @@ import org.junit.Before;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import main.Logic.HintsLogic;
-import main.Players.Player;
-import main.Players.PlayerStorage;
-import main.bot.ChatId;
-import main.questions.QnA;
-import main.questions.QuestionsProvider;
+import Logic.HintsLogic;
+import Players.Player;
+import Players.PlayerStorage;
+import bot.ChatId;
+import questions.QnA;
+import questions.QuestionsProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;

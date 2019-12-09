@@ -4,10 +4,10 @@ import org.junit.Before;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import main.questions.HttpRequest;
-import main.questions.JsonParser;
-import main.questions.QnA;
-import main.questions.QuestionsProvider;
+import questions.HttpRequest;
+import questions.JsonParser;
+import questions.QnA;
+import questions.QuestionsProvider;
 
 import java.io.IOException;
 import java.util.Arrays;
