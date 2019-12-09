@@ -34,7 +34,7 @@ public class App {
         String botToken = fileReader.getInformation(botTokenPath);
 
         ApiContextInitializer.init();
-        Bot bot = new Bot(botUserName, botToken);
+        Bot bot = new Bot("Who_Millionaire_Bot", "1008542793:AAEm5Zh5ShgwwfDVCqU5kC-7sCCTF-2Nf1I");
         TelegramIOImpl io = new TelegramIOImpl(bot);
 
         Logic logic = new Logic(questionsProvider, playerStorage, messageBroker, io, hintsLogic);
