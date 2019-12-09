@@ -61,7 +61,7 @@
                     <assembleDirectory>target</assembleDirectory>
                     <programs>
                         <program>
-                            <mainClass>main.bot.Main</mainClass>
+                            <mainClass>classes/telegram_bot/bot/Main</mainClass>
                             <name>workerBot</name>
                         </program>
                     </programs>
