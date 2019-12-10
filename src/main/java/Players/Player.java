@@ -6,17 +6,17 @@ import questions.QnA;
 public class Player {
     private int countCorrectAnswers;
     private QnA currentQnA;
-    private String amount;
+    private int amount;
     private Hints hints;
 
-    public Player(String amount) {
+    public Player(int amount) {
         this.countCorrectAnswers = 0;
         this.currentQnA = null;
         this.amount = amount;
         hints = new Hints();
     }
 
-    public String getAmount() {
+    public int getAmount() {
         return amount;
     }
 

@@ -1,4 +1,4 @@
-package tests.questions;
+package questions_test;
 
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import questions.JsonParser;

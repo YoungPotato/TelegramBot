@@ -1,6 +1,7 @@
 package Logic;
 
-import Message.MessageBroker;
+import Message.Amount;
+import Message.MessageFactory;
 import Message.Messages;
 import Players.Player;
 import Players.PlayerStorage;
@@ -15,66 +16,68 @@ import java.util.List;
 public class Logic  {
     private QuestionsProvider questionsProvider;
     private PlayerStorage playerStorage;
-    private MessageBroker messageBroker;
+    private MessageFactory messageFactory;
     private TelegramIOImpl io;
     private HintsLogic hintsLogic;
+    private Amount amount;
 
-    public Logic(QuestionsProvider questions, PlayerStorage playerStorage, MessageBroker messageBroker, TelegramIOImpl io, HintsLogic hintsLogic) {
+    public Logic(QuestionsProvider questions, PlayerStorage playerStorage, MessageFactory messageFactory, TelegramIOImpl io, HintsLogic hintsLogic, Amount amount) {
         this.questionsProvider = questions;
         this.playerStorage = playerStorage;
-        this.messageBroker = messageBroker;
+        this.messageFactory = messageFactory;
         this.io = io;
         this.hintsLogic = hintsLogic;
+        this.amount = amount;
     }
 
     public void processMessage(String text, ChatId chatId) throws Exception {
         switch (text) {
             case "/start":
-                io.write(messageBroker.getMessage(Messages.START), chatId);
+                io.write(messageFactory.getMessage(Messages.START), chatId);
                 break;
             case "/game":
-                io.write(messageBroker.getAmountButtons(), chatId);
+                io.write(messageFactory.getAmountButtons(amount.getStrAmount()), chatId);
                 break;
             case "/help":
-                io.write(messageBroker.getMessage(Messages.HELP), chatId);
+                io.write(messageFactory.getMessage(Messages.HELP), chatId);
                 break;
             case "/replaceQuestion":
                 Player player1 = hintsLogic.replaceQuestion(chatId);
-                io.write(messageBroker.getMessage(player1), chatId);
+                io.write(messageFactory.getMessage(player1.getCurrentQnA(), player1.getHints(), player1.getCountCorrectAnswers()), chatId);
                 break;
             case "/delete2IncorrectAnswers":
                 Player player2 = hintsLogic.delete2IncorrectAnswers(chatId);
-                io.write(messageBroker.getMessage(player2), chatId);
+                io.write(messageFactory.getMessage(player2.getCurrentQnA(), player2.getHints(), player2.getCountCorrectAnswers()), chatId);
                 break;
             case "/rightMakeMistake":
                 Player player3 = hintsLogic.rightMakeMistake(chatId);
-                io.write(messageBroker.getMessage(player3), chatId);
+                io.write(messageFactory.getMessage(player3.getCurrentQnA(), player3.getHints(), player3.getCountCorrectAnswers()), chatId);
                 break;
             case "/takeMoney":
-                io.write(messageBroker.createMessage(takeMoney(chatId)), chatId);
+                io.write(messageFactory.createSimpleMessage(takeMoney(chatId)), chatId);
                 break;
             default:
-                if (messageBroker.getAmount().contains(text)) {
+                if (amount.getStrAmount().contains(text)) {
                     Player player4 = setAmount(chatId, text);
-                    io.write(messageBroker.getMessage(player4), chatId);
+                    io.write(messageFactory.getMessage(player4.getCurrentQnA(), player4.getHints(), player4.getCountCorrectAnswers()), chatId);
                 } else {
                     Player player5 = playerStorage.getPlayer(chatId);
                     if (text.equals(player5.getCurrentQnA().getCorrectAnswer())) {
                         player5.addCountCorrectAnswers();
-                        io.write(messageBroker.getMessage(Messages.CORRECT), chatId);
+                        io.write(messageFactory.getMessage(Messages.CORRECT), chatId);
                         if (player5.getCountCorrectAnswers() == 15)
-                            io.write(messageBroker.getMessage(Messages.CONGRATULATIONS), chatId);
+                            io.write(messageFactory.getMessage(Messages.CONGRATULATIONS), chatId);
                         else {
-                            player5.setCurrentQnA(questionsProvider.getQuestion(getLevelDifficulty(player5.getCountCorrectAnswers() + 1)));
-                            io.write(messageBroker.getMessage(player5), chatId);
+                            player5.setCurrentQnA(questionsProvider.getQuestion(hintsLogic.getLevelDifficulty(player5.getCountCorrectAnswers() + 1)));
+                            io.write(messageFactory.getMessage(player5.getCurrentQnA(), player5.getHints(), player5.getCountCorrectAnswers()), chatId);
                         }
                     } else {
-                        io.write(messageBroker.getMessage(Messages.INCORRECT), chatId);
+                        io.write(messageFactory.getMessage(Messages.INCORRECT), chatId);
                         if (player5.getHints().getUsedRightMakeMistake() && player5.getHints().getRightMakeMistake()) {
                             Player player6 = rightMistake(player5, text);
-                            io.write(messageBroker.getMessage(player6), chatId);
+                            io.write(messageFactory.getMessage(player6.getCurrentQnA(), player6.getHints(), player6.getCountCorrectAnswers()), chatId);
                         } else {
-                            io.write(messageBroker.getMessage(Messages.GAMEOVER), chatId);
+                            io.write(messageFactory.getMessage(Messages.GAMEOVER), chatId);
                             playerStorage.deletePlayer(chatId);
                         }
                     }
@@ -83,19 +86,10 @@ public class Logic  {
         }
     }
 
-    private int getLevelDifficulty(int correctAnswers) {
-        if (correctAnswers > 4 && correctAnswers < 10)
-            return 2;
-        else if (correctAnswers >= 10)
-            return 3;
-        else
-            return 4;
-    }
-
     private Boolean takeMoney(Player player) {
         int a = player.getCountCorrectAnswers();
-        for (int i = 0; i < messageBroker.getAmount().size(); i++) {
-            if (messageBroker.getAmount().get(i).equals(player.getAmount()) && a >= i + 1)
+        for (int i = 0; i < amount.getAmount().size(); i++) {
+            if (amount.getAmount().get(i).equals(player.getAmount()) && a >= i + 1)
                 return true;
         }
         return false;
@@ -112,9 +106,9 @@ public class Logic  {
     }
 
     private Player setAmount(ChatId chatId, String text) throws IOException {
-        Player player = new Player(text);
+        Player player = new Player(Integer.parseInt(text));
         playerStorage.addPlayer(chatId, player);
-        player.setCurrentQnA(questionsProvider.getQuestion(getLevelDifficulty(player.getCountCorrectAnswers())));
+        player.setCurrentQnA(questionsProvider.getQuestion(hintsLogic.getLevelDifficulty(player.getCountCorrectAnswers())));
         return player;
     }
 

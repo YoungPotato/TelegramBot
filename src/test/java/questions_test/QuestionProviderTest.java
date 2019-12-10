@@ -1,4 +1,4 @@
-package tests.questions;
+package questions_test;
 
 import org.junit.Before;
 import org.mockito.Mock;

@@ -31,6 +31,6 @@
 
 Замечания(кнопки): 
 1. MessageFactory
-2. Вынести из messageBroker значения несгораемых сумм
+2. Вынести из messageFactory значения несгораемых сумм
 3. Для player сделать интефрейс messageFactory
 4. Тесты на кнопки

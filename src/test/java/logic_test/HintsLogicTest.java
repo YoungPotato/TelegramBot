@@ -1,4 +1,4 @@
-package tests.logic;
+package logic_test;
 
 import org.junit.Before;
 import org.mockito.Mock;
@@ -56,7 +56,7 @@ public class HintsLogicTest {
     }
 
     public Player getMockedPlayer() {
-        Player player = new Player("3000 руб.");
+        Player player = new Player(3000);
         player.setCurrentQnA(getQnA());
         return player;
     }

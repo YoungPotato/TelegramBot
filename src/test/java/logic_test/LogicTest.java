@@ -1,5 +1,6 @@
-package tests.logic;
+package logic_test;
 
+import Message.Amount;
 import org.junit.Before;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -8,7 +9,7 @@ import org.mockito.MockitoAnnotations;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import Logic.HintsLogic;
 import Logic.Logic;
-import Message.MessageBroker;
+import Message.MessageFactory;
 import Message.Messages;
 import Players.Player;
 import Players.PlayerStorage;
@@ -17,7 +18,6 @@ import io.TelegramIOImpl;
 import questions.QnA;
 import questions.QuestionsProvider;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,21 +30,23 @@ public class LogicTest {
     @Mock
     private QuestionsProvider questionsProvider;
     @Mock
-    private MessageBroker messageBroker;
+    private MessageFactory messageBroker;
     @Mock
     PlayerStorage playerStorage;
 
     private Logic logic;
+    private Amount amount;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         HintsLogic hintsLogic = new HintsLogic(playerStorage, questionsProvider);
-        logic = new Logic(questionsProvider, playerStorage, messageBroker, io, hintsLogic);
+        amount = new Amount();
+        logic = new Logic(questionsProvider, playerStorage, messageBroker, io, hintsLogic, amount);
     }
 
     public Player getMockedPlayer() {
-        Player player = new Player("3000 руб.");
+        Player player = new Player(3000);
         player.setCurrentQnA(getQnA());
         return player;
     }
@@ -87,8 +89,8 @@ public class LogicTest {
     public void writeAmountTest() throws Exception {
         logic.processMessage("/game", chatId);
 
-        Mockito.verify(messageBroker).getAmountButtons();
-        Mockito.verify(io).write(messageBroker.getAmountButtons(), chatId);
+        Mockito.verify(messageBroker).getAmountButtons(amount.getStrAmount());
+        Mockito.verify(io).write(messageBroker.getAmountButtons(amount.getStrAmount()), chatId);
     }
 
     @org.junit.Test
@@ -97,14 +99,13 @@ public class LogicTest {
         Mockito.when(messageBroker.getMessage(Messages.CORRECT)).thenReturn(getMockedMessage(text));
         Player mockedPlayer = getMockedPlayer();
         Mockito.when(playerStorage.getPlayer(chatId)).thenReturn(mockedPlayer);
-        Mockito.when(messageBroker.getAmount()).thenReturn(new ArrayList<>());
         Mockito.when(questionsProvider.getQuestion(Mockito.anyInt())).thenReturn(getQnA());
 
         logic.processMessage("Зелёнкой", chatId);
 
         Mockito.verify(messageBroker).getMessage(Messages.CORRECT);
         Mockito.verify(io).write(messageBroker.getMessage(Messages.CORRECT), chatId);
-        Mockito.verify(io).write(messageBroker.getMessage(mockedPlayer), chatId);
+        Mockito.verify(io).write(messageBroker.getMessage(mockedPlayer.getCurrentQnA(), mockedPlayer.getHints(), mockedPlayer.getCountCorrectAnswers()), chatId);
 
         assert (mockedPlayer.getCountCorrectAnswers() == 1);
     }
@@ -115,13 +116,12 @@ public class LogicTest {
         Mockito.when(messageBroker.getMessage(Messages.INCORRECT)).thenReturn(getMockedMessage(text));
         Player mockedPlayer = getMockedPlayer();
         Mockito.when(playerStorage.getPlayer(chatId)).thenReturn(mockedPlayer);
-        Mockito.when(messageBroker.getAmount()).thenReturn(new ArrayList<>());
 
         logic.processMessage("Белилкой", chatId);
 
         Mockito.verify(messageBroker).getMessage(Messages.INCORRECT);
         Mockito.verify(io).write(messageBroker.getMessage(Messages.INCORRECT), chatId);
-        Mockito.verify(io).write(messageBroker.getMessage(mockedPlayer), chatId);
+        Mockito.verify(io).write(messageBroker.getMessage(mockedPlayer.getCurrentQnA(), mockedPlayer.getHints(), mockedPlayer.getCountCorrectAnswers()), chatId);
 
         assert (mockedPlayer.getCountCorrectAnswers() == 0);
     }
@@ -134,7 +134,6 @@ public class LogicTest {
         for (int i = 0; i < 14; i++)
             mockedPlayer.addCountCorrectAnswers();
         Mockito.when(playerStorage.getPlayer(chatId)).thenReturn(mockedPlayer);
-        Mockito.when(messageBroker.getAmount()).thenReturn(new ArrayList<>());
 
         logic.processMessage("Зелёнкой", chatId);
 
