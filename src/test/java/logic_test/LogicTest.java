@@ -1,13 +1,13 @@
 package logic_test;
 
 import Message.Amount;
+import database.DatabaseOperation;
 import org.junit.Before;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import Logic.HintsLogic;
 import Logic.Logic;
 import Message.MessageFactory;
 import Message.Messages;
@@ -18,6 +18,7 @@ import io.TelegramIOImpl;
 import questions.QnA;
 import questions.QuestionsProvider;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,13 +37,14 @@ public class LogicTest {
 
     private Logic logic;
     private Amount amount;
+    private DatabaseOperation databaseOperation;
 
     @Before
-    public void setUp() {
+    public void setUp() throws SQLException, ClassNotFoundException {
+        databaseOperation = new DatabaseOperation();
         MockitoAnnotations.initMocks(this);
-        HintsLogic hintsLogic = new HintsLogic(playerStorage, questionsProvider);
         amount = new Amount();
-        logic = new Logic(questionsProvider, playerStorage, messageBroker, io, hintsLogic, amount);
+        logic = new Logic(questionsProvider, playerStorage, messageBroker, io, amount, databaseOperation);
     }
 
     public Player getMockedPlayer() {

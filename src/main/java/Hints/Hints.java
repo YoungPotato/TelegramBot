@@ -1,59 +1,65 @@
 package Hints;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import questions.QnA;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Hints {
     private Delete2IncorrectAnswers delete2IncorrectAnswers;
     private ReplaceQuestion replaceQuestion;
-    private RightMakeMistake rightMakeMistake;
+    private HallHelp hallHelp;
+
+    private Boolean isAvailableHallHelp = true;
+    private Boolean isAvailableDelete2IncorrectAnswer = true;
+    private Boolean isAvailableReplaceQuestion = true;
+
 
     public Hints() {
         delete2IncorrectAnswers = new Delete2IncorrectAnswers();
         replaceQuestion = new ReplaceQuestion();
-        rightMakeMistake = new RightMakeMistake();
+        hallHelp = new HallHelp();
     }
 
-    public Boolean getDelete2IncorrectAnswers() {
-        return delete2IncorrectAnswers.getValue();
+    public Boolean isAvailableHallHelp() {
+        return isAvailableHallHelp;
     }
-    public Boolean getReplaceQuestion() {
-        return replaceQuestion.getValue();
+    public Boolean isAvailableDelete2IncorrectAnswer() {
+        return isAvailableDelete2IncorrectAnswer;
     }
-    public Boolean getRightMakeMistake() {
-        return rightMakeMistake.getValue();
-    }
-    public Boolean getUsedRightMakeMistake() {
-        return rightMakeMistake.getUsed();
+    public Boolean isAvailableReplaceQuestion() {
+        return isAvailableReplaceQuestion;
     }
 
-    public void setDelete2IncorrectAnswers() {
-        delete2IncorrectAnswers.setValue();
+    public String getHallHelp(String question) throws SQLException, ClassNotFoundException {
+        isAvailableHallHelp = false;
+        return hallHelp.getPopularAnswer(question);
     }
-    public  void setReplaceQuestion() {
-        replaceQuestion.setValue();
+
+    public QnA delete2IncorrectAnswers(QnA qnA) throws SQLException, ClassNotFoundException {
+        isAvailableDelete2IncorrectAnswer = false;
+        return delete2IncorrectAnswers.delete2IncorrectAnswers(qnA);
     }
-    public void setRightMakeMistake() {
-        rightMakeMistake.setValue();
+
+    public QnA replaceQuestion() throws SQLException, ClassNotFoundException {
+        isAvailableReplaceQuestion = false;
+        return replaceQuestion.replaceQuestion();
     }
-    public void setUsedRightMakeMistake() {
-        rightMakeMistake.setUsed();
-    }
+
 
     public List<ImmutablePair<String, String>> getAvailableHints() {
         List<ImmutablePair<String, String>> availableHints = new ArrayList<>();
-        if (delete2IncorrectAnswers.getValue()) {
+        if (isAvailableHallHelp) {
+            availableHints.add(hallHelp.getName());
+        }
+        if (isAvailableDelete2IncorrectAnswer) {
             availableHints.add(delete2IncorrectAnswers.getName());
         }
-        if (replaceQuestion.getValue()) {
+        if (isAvailableReplaceQuestion) {
             availableHints.add(replaceQuestion.getName());
-        }
-        if (!rightMakeMistake.getUsed()) {
-            availableHints.add(rightMakeMistake.getName());
         }
         return availableHints;
     }
-
 }
