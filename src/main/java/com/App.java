@@ -31,11 +31,8 @@ public class App {
         MessageFactory messageFactory = new MessageFactory(buttons);
         PlayerStorage playerStorage = new PlayerStorage();
 
-//        String botUserName = System.getenv("botUserName");
-//        String botToken = System.getenv("botToken");
-
-        String botUserName = "Who_Millionaire_Bot";
-        String botToken = "1008542793:AAEm5Zh5ShgwwfDVCqU5kC-7sCCTF-2Nf1I";
+        String botUserName = System.getenv("botUserName");
+        String botToken = System.getenv("botToken");
 
         ApiContextInitializer.init();
         Bot bot = new Bot(botUserName, botToken);
